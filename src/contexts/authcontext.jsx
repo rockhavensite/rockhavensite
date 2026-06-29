@@ -1,12 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from '../config/firebase';
+import { auth, db } from '../config/firebase.js';
 import { onAuthStateChanged, signInAnonymously, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
-// Crear el contexto
 const AuthContext = createContext(null);
 
-// Hook personalizado para usar el contexto
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -15,7 +13,6 @@ export const useAuth = () => {
   return context;
 };
 
-// Componente proveedor
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -23,17 +20,19 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      // 1. Si no hay usuario, intenta anonimizar
       if (!firebaseUser) {
         try {
           await signInAnonymously(auth);
         } catch (error) {
           console.error('Error al iniciar sesión:', error);
+          setLoading(false); // IMPORTANTE: Cerrar carga aunque falle
         }
-        return;
+        return; 
       }
 
+      // 2. Si hay usuario, cargar perfil
       setUser(firebaseUser);
-      
       try {
         const docSnap = await getDoc(doc(db, "users", firebaseUser.uid));
         if (docSnap.exists() && docSnap.data().profileCompleted) {
@@ -43,6 +42,7 @@ export const AuthProvider = ({ children }) => {
         console.error('Error al cargar perfil:', error);
       }
       
+      // 3. Finalizar carga siempre al tener usuario o tras el intento
       setLoading(false);
     });
 
@@ -60,16 +60,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const value = {
-    user,
-    profile,
-    setProfile,
-    loading,
-    logout
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, profile, setProfile, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );
