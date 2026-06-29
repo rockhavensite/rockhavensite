@@ -1,9 +1,9 @@
 import React from 'react';
-import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
-import { Onboarding } from './pages/Onboarding.jsx';
-import { ProfileCreation } from './pages/ProfileCreation.jsx';
-import { Dashboard } from './pages/Dashboard.jsx';
-import { Loading } from './pages/Loading.jsx';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { Onboarding } from './pages/Onboarding';
+import { ProfileCreation } from './pages/ProfileCreation';
+import { Dashboard } from './pages/Dashboard';
+import { Loading } from './pages/Loading';
 
 const AppContent = () => {
   const { profile, loading } = useAuth();

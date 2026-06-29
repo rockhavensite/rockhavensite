@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../config/firebase.js';
-import { useAuth } from '../contexts/AuthContext.jsx';
+import { db } from '../config/firebase';
+import { useAuth } from '../contexts/AuthContext';
 
 const INITIAL_PROFILE = {
   fullName: "",

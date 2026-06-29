@@ -1,6 +1,3 @@
-import React, { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
 import { ActionCard } from "../assets/shared/ActionCard";
 import { BandasPanel } from "../assets/dashboard/BandasPanel";
 import { MusicosPanel } from "../assets/dashboard/MusicosPanel";
